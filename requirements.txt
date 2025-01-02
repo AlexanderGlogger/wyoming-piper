@@ -1,1 +1,2 @@
 wyoming==1.5.3
+german_transliterate @ git+https://github.com/repodiac/german_transliterate#egg=german_transliterate
