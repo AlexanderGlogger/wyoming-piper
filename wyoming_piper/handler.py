@@ -6,6 +6,7 @@ import math
 import os
 import wave
 from typing import Any, Dict, Optional
+from german_transliterate.core import GermanTransliterate
 
 from wyoming.audio import AudioChunk, AudioStart, AudioStop
 from wyoming.error import Error
@@ -60,6 +61,9 @@ class PiperEventHandler(AsyncEventHandler):
 
         # Join multiple lines
         text = " ".join(raw_text.strip().splitlines())
+
+        ops = {'accent_peculiarity', 'amount_money', 'date', 'timestamp', 'time_of_day', 'ordinal', 'special'}
+        text = GermanTransliterate(transliterate_ops=ops).transliterate(text)
 
         if self.cli_args.auto_punctuation and text:
             # Add automatic punctuation (important for some voices)
