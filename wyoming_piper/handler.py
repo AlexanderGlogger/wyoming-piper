@@ -59,13 +59,18 @@ class PiperEventHandler(AsyncEventHandler):
 
         raw_text = synthesize.text
 
+        print("Raw text: %s", raw_text)
+
         # Join multiple lines
         text = " ".join(raw_text.strip().splitlines())
 
         ops = {'accent_peculiarity', 'amount_money', 'date', 'timestamp', 'time_of_day', 'ordinal', 'special'}
         text = GermanTransliterate(transliterate_ops=ops).transliterate(text)
 
-        if self.cli_args.auto_punctuation and text:
+        print("Normalized text: %s", text)
+
+        #if self.cli_args.auto_punctuation and text:
+        if text:
             # Add automatic punctuation (important for some voices)
             has_punctuation = False
             for punc_char in self.cli_args.auto_punctuation:
@@ -75,6 +80,8 @@ class PiperEventHandler(AsyncEventHandler):
 
             if not has_punctuation:
                 text = text + self.cli_args.auto_punctuation[0]
+
+        print("Punctuation: %s", text)
 
         async with self.process_manager.processes_lock:
             _LOGGER.debug("synthesize: raw_text=%s, text='%s'", raw_text, text)
